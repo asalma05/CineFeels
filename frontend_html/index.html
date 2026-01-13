@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineFeels - Analyse de Films par Émotions</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Landing Page (visible si non connecté) -->
+    <div id="landing-page" class="page active">
+        <div class="landing-container">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="logo-large">
+                    <div class="logo-icon">🎬</div>
+                </div>
+                <h1 class="title">Cine<span class="gold">Feels</span></h1>
+                <p class="subtitle">Analyse intelligente de films par émotions</p>
+            </div>
+
+            <!-- About Section -->
+            <div class="about-section">
+                <div class="about-card">
+                    <h2 class="gold">À propos de CineFeels</h2>
+                    <p>
+                        <strong>CineFeels</strong> est une plateforme innovante qui utilise l'intelligence artificielle 
+                        pour analyser les émotions dans les films et vous recommander des contenus parfaitement adaptés à votre état d'esprit.
+                    </p>
+                    <p>
+                        Notre système d'analyse émotionnelle avancé, basé sur <strong class="gold">BERT AI</strong>, 
+                        examine en profondeur les films pour identifier les émotions dominantes.
+                    </p>
+                </div>
+
+                <!-- Features -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎭</div>
+                        <h3>Analyse Émotionnelle</h3>
+                        <p>Sélectionnez vos émotions et leur intensité pour trouver le film parfait</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Historique Personnel</h3>
+                        <p>Suivez vos analyses et découvrez vos préférences émotionnelles</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎬</div>
+                        <h3>Recommandations IA</h3>
+                        <p>Des suggestions personnalisées basées sur vos émotions actuelles</p>
+                    </div>
+                </div>
+
+                <!-- Technologies -->
+                <div class="tech-section">
+                    <h3>Propulsé par des technologies de pointe</h3>
+                    <div class="tech-badges">
+                        <span class="tech-badge">🤖 BERT AI</span>
+                        <span class="tech-badge">🍃 MongoDB</span>
+                        <span class="tech-badge">⚡ FastAPI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="auth-buttons">
+                <button class="btn btn-primary" onclick="showModal('login-modal')">Se connecter</button>
+                <button class="btn btn-secondary" onclick="showModal('register-modal')">Créer un compte</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page (visible après connexion) -->
+    <div id="dashboard-page" class="page">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo" onclick="showPage('dashboard-page')">
+                    <span class="logo-icon-small">🎬</span>
+                    <div class="logo-text">
+                        <span class="logo-title">Cine<span class="gold">Feels</span></span>
+                        <span class="logo-subtitle">Analyse de films par IA</span>
+                    </div>
+                </a>
+                <div class="header-right">
+                    <button class="btn btn-share btn-small" onclick="openShareModal()">📤 Partager</button>
+                    <span class="user-greeting">Bonjour, <span id="username-display" class="gold">Utilisateur</span></span>
+                    <button class="btn btn-danger btn-small" onclick="logout()">Déconnexion</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Bonjour, <span id="username-welcome" class="gold">Utilisateur</span> 👋</h1>
+                <p>Prêt à découvrir de nouveaux films selon vos émotions ?</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📊</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Analyses totales</span>
+                        <span id="total-analyses" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">🎬</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Films découverts</span>
+                        <span id="total-movies" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold-bg">⭐</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Films favoris</span>
+                        <span id="total-favorites" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="scrollToWatchlist()">
+                    <div class="stat-icon green">📋</div>
+                    <div class="stat-info">
+                        <span class="stat-label">À voir plus tard</span>
+                        <span id="total-watchlist" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radar Chart Section -->
+            <div class="section-card">
+                <h2>Votre profil émotionnel</h2>
+                <div class="radar-container">
+                    <canvas id="radar-chart" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Analysis History -->
+            <div class="section-card">
+                <h2>Historique d'analyse</h2>
+                <div id="analysis-history" class="history-list">
+                    <p class="empty-message">Aucune analyse pour le moment. Commencez par sélectionner vos émotions !</p>
+                </div>
+            </div>
+
+            <!-- Watchlist Section -->
+            <div class="section-card" id="watchlist-section">
+                <div class="section-header">
+                    <h2>📋 Ma Liste à voir</h2>
+                    <button class="btn btn-secondary btn-small" onclick="clearWatchlist()">Vider la liste</button>
+                </div>
+                <div id="watchlist-movies" class="movies-grid">
+                    <p class="empty-message">Votre liste est vide. Ajoutez des films en cliquant sur le bouton "À voir plus tard" !</p>
+                </div>
+            </div>
+
+            <!-- Best Movies -->
+            <div class="section-card">
+                <h2>Meilleurs films pour vous</h2>
+                <div id="best-movies" class="movies-grid">
+                    <!-- Movies will be loaded here -->
+                </div>
+            </div>
+
+            <!-- New Analysis Button -->
+            <div class="center-button action-buttons">
+                <button class="btn btn-primary btn-large" onclick="toggleEmotionSelector()">
+                    🎭 Nouvelle analyse émotionnelle
+                </button>
+                <button class="btn btn-secondary btn-large" onclick="toggleCompareMode()">
+                    ⚖️ Comparer des films
+                </button>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div id="advanced-filters" class="section-card">
+                <div class="section-header">
+                    <h2>🔍 Filtres avancés</h2>
+                    <button class="btn btn-secondary btn-small" onclick="resetFilters()">Réinitialiser</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="filter-decade">Décennie</label>
+                        <select id="filter-decade" onchange="applyFilters()">
+                            <option value="">Toutes</option>
+                            <option value="2020">2020s</option>
+                            <option value="2010">2010s</option>
+                            <option value="2000">2000s</option>
+                            <option value="1990">1990s</option>
+                            <option value="1980">1980s</option>
+                            <option value="1970">1970s et avant</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-genre">Genre</label>
+                        <select id="filter-genre" onchange="applyFilters()">
+                            <option value="">Tous</option>
+                            <option value="28">Action</option>
+                            <option value="35">Comédie</option>
+                            <option value="18">Drame</option>
+                            <option value="27">Horreur</option>
+                            <option value="10749">Romance</option>
+                            <option value="878">Science-Fiction</option>
+                            <option value="53">Thriller</option>
+                            <option value="16">Animation</option>
+                            <option value="99">Documentaire</option>
+                            <option value="14">Fantaisie</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-duration">Durée</label>
+                        <select id="filter-duration" onchange="applyFilters()">
+                            <option value="">Toutes</option>
+                            <option value="90">Court (&lt; 90 min)</option>
+                            <option value="120">Moyen (90-120 min)</option>
+                            <option value="180">Long (&gt; 120 min)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-rating">Note minimum</label>
+                        <select id="filter-rating" onchange="applyFilters()">
+                            <option value="">Toutes</option>
+                            <option value="8">★★★★ (8+)</option>
+                            <option value="7">★★★ (7+)</option>
+                            <option value="6">★★ (6+)</option>
+                            <option value="5">★ (5+)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotion Selector -->
+            <div id="emotion-selector" class="section-card hidden">
+                <div class="section-header">
+                    <h2>Sélectionnez vos émotions</h2>
+                    <button class="btn btn-secondary btn-small" onclick="resetEmotions()">Réinitialiser</button>
+                </div>
+
+                <div class="emotions-section">
+                    <h3>Émotions de base</h3>
+                    <div class="emotions-grid">
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😊</span>
+                                <span class="emotion-label">Joie</span>
+                                <span class="emotion-value" id="joy-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="joy-slider" data-emotion="joy" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😢</span>
+                                <span class="emotion-label">Tristesse</span>
+                                <span class="emotion-value" id="sadness-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="sadness-slider" data-emotion="sadness" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😨</span>
+                                <span class="emotion-label">Peur</span>
+                                <span class="emotion-value" id="fear-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="fear-slider" data-emotion="fear" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😠</span>
+                                <span class="emotion-label">Colère</span>
+                                <span class="emotion-value" id="anger-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="anger-slider" data-emotion="anger" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😲</span>
+                                <span class="emotion-label">Surprise</span>
+                                <span class="emotion-value" id="surprise-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="surprise-slider" data-emotion="surprise" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">🤢</span>
+                                <span class="emotion-label">Dégoût</span>
+                                <span class="emotion-value" id="disgust-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="disgust-slider" data-emotion="disgust" oninput="updateEmotion(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emotions-section">
+                    <h3>Émotions CineFeels</h3>
+                    <div class="emotions-grid">
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">🎢</span>
+                                <span class="emotion-label">Frisson</span>
+                                <span class="emotion-value" id="thrill-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="thrill-slider" data-emotion="thrill" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">💕</span>
+                                <span class="emotion-label">Romance</span>
+                                <span class="emotion-value" id="romance-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="romance-slider" data-emotion="romance" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">😄</span>
+                                <span class="emotion-label">Humour</span>
+                                <span class="emotion-value" id="humor-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="humor-slider" data-emotion="humor" oninput="updateEmotion(this)">
+                        </div>
+                        <div class="emotion-slider">
+                            <div class="emotion-header">
+                                <span class="emotion-icon">✨</span>
+                                <span class="emotion-label">Inspiration</span>
+                                <span class="emotion-value" id="inspiration-value">0%</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider" id="inspiration-slider" data-emotion="inspiration" oninput="updateEmotion(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="center-button">
+                    <button class="btn btn-primary" onclick="getRecommendations()">🔍 Obtenir des recommandations</button>
+                </div>
+            </div>
+
+            <!-- Movie Recommendations -->
+            <div id="recommendations-section" class="section-card hidden">
+                <h2>Films recommandés pour vous</h2>
+                <div id="recommended-movies" class="movies-grid">
+                    <!-- Movies will be loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <span>Powered by</span>
+                <span class="gold">BERT AI</span>
+                <span>•</span>
+                <span class="gold">MongoDB</span>
+                <span>•</span>
+                <span class="gold">FastAPI</span>
+            </div>
+            <p class="copyright">© 2025 CineFeels - Plateforme d'analyse de films par IA</p>
+        </footer>
+    </div>
+
+    <!-- Movie Detail Page -->
+    <div id="movie-detail-page" class="page">
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo" onclick="showPage('dashboard-page')">
+                    <span class="logo-icon-small">🎬</span>
+                    <div class="logo-text">
+                        <span class="logo-title">Cine<span class="gold">Feels</span></span>
+                        <span class="logo-subtitle">Analyse de films par IA</span>
+                    </div>
+                </a>
+                <div class="header-right">
+                    <button class="btn btn-secondary btn-small" onclick="showPage('dashboard-page')">← Retour au Dashboard</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="movie-detail-content">
+            <div id="movie-detail-container">
+                <!-- Movie details will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Connexion</h2>
+                <button class="modal-close" onclick="hideModal('login-modal')">×</button>
+            </div>
+            <div id="login-error" class="error-message hidden"></div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Mot de passe</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Se connecter</button>
+            </form>
+            <p class="modal-footer-text">
+                Pas encore de compte ? 
+                <a href="#" onclick="switchModal('login-modal', 'register-modal')">Créer un compte</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Créer un compte</h2>
+                <button class="modal-close" onclick="hideModal('register-modal')">×</button>
+            </div>
+            <div id="register-error" class="error-message hidden"></div>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="register-fullname">Nom complet</label>
+                    <input type="text" id="register-fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-username">Nom d'utilisateur</label>
+                    <input type="text" id="register-username" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Mot de passe</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Créer un compte</button>
+            </form>
+            <p class="modal-footer-text">
+                Déjà un compte ? 
+                <a href="#" onclick="switchModal('register-modal', 'login-modal')">Se connecter</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Chargement...</p>
+    </div>
+
+    <!-- Compare Modal -->
+    <div id="compare-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>⚖️ Comparaison de films</h2>
+                <button class="modal-close" onclick="hideModal('compare-modal')">×</button>
+            </div>
+            <p class="compare-info">Sélectionnez 2 à 3 films pour comparer leurs profils émotionnels</p>
+            <div id="compare-selection" class="compare-selection">
+                <!-- Selected films will appear here -->
+            </div>
+            <div id="compare-results" class="compare-results hidden">
+                <!-- Comparison results will appear here -->
+            </div>
+            <div class="compare-movies-list">
+                <h3>Films disponibles</h3>
+                <input type="text" id="compare-search" class="search-input" placeholder="Rechercher un film..." oninput="searchMoviesForCompare()">
+                <div id="compare-available-movies" class="movies-grid small">
+                    <!-- Available movies for comparison -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="hideModal('compare-modal')">Annuler</button>
+                <button class="btn btn-primary" id="compare-btn" onclick="compareSelectedMovies()" disabled>Comparer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📤 Partager votre profil</h2>
+                <button class="modal-close" onclick="hideModal('share-modal')">×</button>
+            </div>
+            <div class="share-preview" id="share-preview">
+                <!-- Share preview content -->
+            </div>
+            <div class="share-buttons">
+                <button class="share-btn twitter" onclick="shareOnTwitter()">
+                    <span>🐦</span> Twitter
+                </button>
+                <button class="share-btn facebook" onclick="shareOnFacebook()">
+                    <span>📘</span> Facebook
+                </button>
+                <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
+                    <span>💬</span> WhatsApp
+                </button>
+                <button class="share-btn copy" onclick="copyShareLink()">
+                    <span>🔗</span> Copier le lien
+                </button>
+            </div>
+            <div id="share-copied" class="share-copied hidden">Lien copié !</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
